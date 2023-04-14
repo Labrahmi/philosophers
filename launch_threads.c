@@ -6,11 +6,29 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:27:43 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/04/13 23:12:51 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/04/14 01:55:46 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	ft_check_death(t_philo *philo)
+{
+	pthread_mutex_lock(&(philo->data->lock_death));
+	if ((philo->data->is_dead) == 1)
+	{
+		pthread_mutex_unlock(&(philo->data->lock_death));
+		return (1);
+	}
+	pthread_mutex_unlock(&(philo->data->lock_death));
+	return (0);
+}
+
+void	ft_print(t_philo *philo, long int start, int id, char *message)
+{
+	// if (ft_check_death(philo) == 0)
+		printf("%ld %d %s\n", get_time() - start, (id + 1), message);
+}
 
 void	*execute_ths(void *arg)
 {
@@ -25,32 +43,34 @@ void	*execute_ths(void *arg)
 	while (1)
 	{
 		/* Check-Death */
-		pthread_mutex_lock(&(philo->data->lock_death));
-		if (philo->data->is_dead == 1)
-		{
-			pthread_mutex_unlock(&(philo->data->lock_death));
-			break;
-		}
-		pthread_mutex_unlock(&(philo->data->lock_death));
+		if (ft_check_death(philo))
+			return (NULL);
 		/* Think */
-		printf("%ld %d is thinking\n", get_time() - start, (id + 1));
+		ft_print(philo, start, id, "is thinking");
 		/* Take forks */
 		pthread_mutex_lock(&(philo->data->forks[id]));
-		printf("%ld %d has taken a fork\n", get_time() - start, (id + 1));
+		ft_print(philo, start, id, "has taken a fork");
+		if (NUM == 1)
+		{
+			pthread_mutex_unlock(&(philo->data->forks[id]));		
+			return (NULL);
+		}
 		pthread_mutex_lock(&(philo->data->forks[r_id]));
-		printf("%ld %d has taken a fork\n", get_time() - start, (id + 1));
+		ft_print(philo, start, id, "has taken a fork");
 		/* Eat */
-		printf("%ld %d is eating\n", get_time() - start, (id + 1));
+		ft_print(philo, start, id, "is eating");
 		pthread_mutex_lock(&(philo->data->lock_last[id]));
 		philo->last_eat = get_time();
 		pthread_mutex_unlock(&(philo->data->lock_last[id]));
-		my_sleep(EAT);
+		if (ft_check_death(philo) == 0)
+			my_sleep(EAT, philo);
 		/* Put forks */
 		pthread_mutex_unlock(&(philo->data->forks[r_id]));
 		pthread_mutex_unlock(&(philo->data->forks[id]));
 		/* Sleep */
-		printf("%ld %d is sleeping\n", get_time() - start, (id + 1));
-		my_sleep(SLP);
+		ft_print(philo, start, id, "is sleeping");
+		if (ft_check_death(philo) == 0)
+			my_sleep(SLP, philo);
 	}
 	return 0;
 }
@@ -65,17 +85,17 @@ void	ft_launch_threads(t_philo *philos)
 		philos[i].id = i;
 		philos[i].last_eat = get_time();
 		pthread_create(&(philos[i].pthread), NULL, execute_ths, &(philos[i]));
-		usleep(NUM / 40);
+		usleep(NUM / 20);
 		i += 2;
 	}
-	usleep(250);
+	usleep(100 + (NUM / 10));
 	i = 1;
 	while (i < NUM)
 	{
 		philos[i].id = i;
 		philos[i].last_eat = get_time();
 		pthread_create(&(philos[i].pthread), NULL, execute_ths, &(philos[i]));
-		usleep(NUM / 40);
+		usleep(NUM / 20);
 		i += 2;
 	}
 }

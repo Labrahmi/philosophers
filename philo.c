@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 20:29:24 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/04/13 23:14:43 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/04/14 01:48:44 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,14 @@ int main(int argc, char const *argv[])
 	t_data		*data;
 	int			done;
 
-	done = 1;
-	if (ft_allocate_data(&philos, &data))
-		return 0;
+	data = (t_data *) malloc(sizeof(t_data));
+	philos = (t_philo *) malloc(sizeof(t_philo) * NUM);
+	data->forks = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t) * NUM);
+	data->lock_last = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t) * NUM);
 	init_dead_mutex(data, philos);
 	ft_launch_threads(philos);
-	usleep(250);
+	// usleep(250);
+	done = 1;
 	while (done)
 	{
 		i = 0;
@@ -35,9 +37,9 @@ int main(int argc, char const *argv[])
 			if (get_time() - philos[i].last_eat > DIE)
 			{
 				pthread_mutex_unlock(&(data->lock_last[i]));
-				pthread_mutex_lock(&(philos[i].data->lock_death));
+				pthread_mutex_lock(&(data->lock_death));
 				data->is_dead = 1;
-				pthread_mutex_unlock(&(philos[i].data->lock_death));
+				pthread_mutex_unlock(&(data->lock_death));
 				printf("%ld %d died\n", get_time() - data->start, (i + 1));
 				done = 0;
 			}
@@ -45,7 +47,7 @@ int main(int argc, char const *argv[])
 				pthread_mutex_unlock(&(data->lock_last[i]));
 			i++;
 		}
-		usleep(250);
+		usleep(100);
 	}
 	i = 0;
 	while (i < NUM)

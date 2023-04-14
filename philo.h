@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 11:30:23 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/04/13 23:14:56 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/04/14 01:51:42 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,20 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-# define NUM 5
-# define DIE 250
-# define EAT 150
+# define NUM 200
+# define DIE 500
+# define EAT 100
 # define SLP 100
+
+typedef pthread_mutex_t mutex_t;
 
 typedef struct s_data
 {
-	int				is_dead;
-	pthread_mutex_t	lock_death;
-	long int		start;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	*lock_last;
+	long int	start;
+	int			is_dead;
+	mutex_t		*forks;
+	mutex_t		lock_death;
+	mutex_t		*lock_last;
 }	t_data;
 
 typedef struct s_philo
@@ -43,7 +45,7 @@ typedef struct s_philo
 	t_data			*data;
 } t_philo;
 
-void	my_sleep(int ms);
+void	my_sleep(int ms, t_philo *philo);
 long	get_time(void);
 void    ft_launch_threads(t_philo *philos);
 void	*execute_ths(void *arg);

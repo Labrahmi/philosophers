@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 20:29:24 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/04/14 01:48:44 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/04/16 01:31:29 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,15 @@ int main(int argc, char const *argv[])
 				pthread_mutex_unlock(&(data->lock_last[i]));
 				pthread_mutex_lock(&(data->lock_death));
 				data->is_dead = 1;
-				pthread_mutex_unlock(&(data->lock_death));
 				printf("%ld %d died\n", get_time() - data->start, (i + 1));
 				done = 0;
+				pthread_mutex_unlock(&(data->lock_death));
 			}
 			else
 				pthread_mutex_unlock(&(data->lock_last[i]));
 			i++;
 		}
-		usleep(100);
+		usleep(1000);
 	}
 	i = 0;
 	while (i < NUM)

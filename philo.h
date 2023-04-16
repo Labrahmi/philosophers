@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 11:30:23 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/04/14 01:51:42 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/04/16 02:26:41 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 # include <sys/time.h>
 
 # define NUM 200
-# define DIE 500
-# define EAT 100
+# define DIE 310
+# define EAT 150
 # define SLP 100
 
 typedef pthread_mutex_t mutex_t;

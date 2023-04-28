@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 20:29:24 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/04/16 01:31:29 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/04/28 23:54:25 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int main(int argc, char const *argv[])
 	int			done;
 
 	data = (t_data *) malloc(sizeof(t_data));
+	if (!(ft_check_args(argc, argv, data)))
+		return (0);
 	philos = (t_philo *) malloc(sizeof(t_philo) * NUM);
 	data->forks = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t) * NUM);
 	data->lock_last = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t) * NUM);

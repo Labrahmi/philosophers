@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 23:48:04 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/04/28 23:54:34 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/04/29 23:26:30 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,12 @@ int ft_check_args(int argc, const char **argv, t_data *data)
 		if (ft_atoi(argv[i++]) <= 0)
 			return (0);
 	}
+	data->num_p = ft_atoi(argv[1]);
+	data->die = ft_atoi(argv[2]);
+	data->eat = ft_atoi(argv[3]);
+	data->slp = ft_atoi(argv[4]);
+	data->num_e = -1;
+	if (argc == 6)
+		data->num_e = ft_atoi(argv[5]);
 	return (1);
 }

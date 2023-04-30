@@ -4,6 +4,7 @@
         "philo.h": "c",
         "stdlib.h": "c",
         "unistd.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "string.h": "c"
     }
 }

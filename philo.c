@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 20:29:24 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/05/02 01:29:53 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/05/02 16:07:49 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	check_eats(t_main_vars *vars, int *done, t_philo *philos)
 	int	i;
 
 	i = 0;
-	while ((i < vars->data->num_p) && done)
+	while (i < vars->data->num_p)
 	{
 		pthread_mutex_lock(&(vars->data->lock_eats[i]));
 		if (vars->tot_eats >= vars->data->num_e * vars->data->num_p
@@ -50,7 +50,7 @@ void	check_eats(t_main_vars *vars, int *done, t_philo *philos)
 			pthread_mutex_unlock(&(vars->data->lock_eats[i]));
 			pthread_mutex_lock(&(vars->data->lock_death));
 			vars->data->is_dead = 1;
-			done = 0;
+			*done = 0;
 			pthread_mutex_unlock(&(vars->data->lock_death));
 		}
 		else

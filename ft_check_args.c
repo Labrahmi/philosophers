@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 23:48:04 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/04/29 23:26:30 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/05/02 00:08:38 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	ft_atoi(const char *str)
 	return (helper(str, some, i, sign) * sign);
 }
 
-int ft_check_args(int argc, const char **argv, t_data *data)
+int	ft_check_args(int argc, const char **argv, t_data *data)
 {
 	int	i;
 

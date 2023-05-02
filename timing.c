@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 11:23:26 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/04/16 02:28:34 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/05/02 01:32:27 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	my_sleep(int ms, t_philo *philo)
 	{
 		usleep(500);
 		if ((get_time() - start) >= ms)
-			return;
+			return ;
 		pthread_mutex_lock(&(philo->data->lock_death));
 		if (philo->data->is_dead == 1)
 			done = 0;

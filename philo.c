@@ -6,52 +6,91 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 20:29:24 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/04/29 23:45:29 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/05/02 01:29:53 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int main(int argc, char const *argv[])
+void	check_die(t_main_vars *vars, int *done, t_philo *philos)
+{
+	int	i;
+
+	i = 0;
+	while ((i < vars->data->num_p) && *done)
+	{
+		pthread_mutex_lock(&(vars->data->lock_last[i]));
+		if (get_time() - philos[i].last_eat > vars->data->die)
+		{
+			pthread_mutex_unlock(&(vars->data->lock_last[i]));
+			pthread_mutex_lock(&(vars->data->lock_death));
+			vars->data->is_dead = 1;
+			printf("%ld %d died\n", get_time() - vars->data->start, (i + 1));
+			*done = 0;
+			pthread_mutex_unlock(&(vars->data->lock_death));
+		}
+		else
+			pthread_mutex_unlock(&(vars->data->lock_last[i]));
+		vars->tot_eats += philos[i].eats;
+		i++;
+	}
+}
+
+void	check_eats(t_main_vars *vars, int *done, t_philo *philos)
+{
+	int	i;
+
+	i = 0;
+	while ((i < vars->data->num_p) && done)
+	{
+		pthread_mutex_lock(&(vars->data->lock_eats[i]));
+		if (vars->tot_eats >= vars->data->num_e * vars->data->num_p
+			&& (vars->data->num_e != -1))
+		{
+			pthread_mutex_unlock(&(vars->data->lock_eats[i]));
+			pthread_mutex_lock(&(vars->data->lock_death));
+			vars->data->is_dead = 1;
+			done = 0;
+			pthread_mutex_unlock(&(vars->data->lock_death));
+		}
+		else
+			pthread_mutex_unlock(&(vars->data->lock_eats[i]));
+		i++;
+	}
+}
+
+void	init_variables(int *done, t_main_vars *vars, t_philo *philos)
+{
+	init_dead_mutex(vars->data, philos);
+	ft_launch_threads(philos);
+	*done = 1;
+}
+
+int	main(int argc, char const *argv[])
 {
 	int			i;
-	int			is_dead;
-	t_philo		*philos;
-	t_data		*data;
 	int			done;
+	int			is_dead;
+	t_main_vars	vars;
+	t_philo		*philos;
 
-	data = (t_data *) malloc(sizeof(t_data));
-	if (!(ft_check_args(argc, argv, data)))
+	vars.data = (t_data *) malloc(sizeof(t_data));
+	if (!(ft_check_args(argc, argv, vars.data)))
 		return (0);
-	philos = (t_philo *) malloc(sizeof(t_philo) * data->num_p);
-	data->forks = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t) * data->num_p);
-	data->lock_last = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t) * data->num_p);
-	init_dead_mutex(data, philos);
-	ft_launch_threads(philos);
-	done = 1;
+	philos = (t_philo *) malloc(sizeof(t_philo) * vars.data->num_p);
+	vars.data->forks = (t_mu *) malloc(sizeof(t_mu) * vars.data->num_p);
+	vars.data->lock_last = (t_mu *) malloc(sizeof(t_mu) * vars.data->num_p);
+	vars.data->lock_eats = (t_mu *) malloc(sizeof(t_mu) * vars.data->num_p);
+	init_variables(&done, &vars, philos);
 	while (done)
 	{
-		i = 0;
-		while ((i < data->num_p) && done)
-		{
-			pthread_mutex_lock(&(data->lock_last[i]));
-			if (get_time() - philos[i].last_eat > data->die)
-			{
-				pthread_mutex_unlock(&(data->lock_last[i]));
-				pthread_mutex_lock(&(data->lock_death));
-				data->is_dead = 1;
-				printf("%ld %d died\n", get_time() - data->start, (i + 1));
-				done = 0;
-				pthread_mutex_unlock(&(data->lock_death));
-			}
-			else
-				pthread_mutex_unlock(&(data->lock_last[i]));
-			i++;
-		}
+		vars.tot_eats = 0;
+		check_die(&vars, &done, philos);
+		check_eats(&vars, &done, philos);
 		usleep(1000);
 	}
 	i = 0;
-	while (i < data->num_p)
+	while (i < vars.data->num_p)
 		pthread_join(philos[i++].pthread, NULL);
-	return 0;
+	return (0);
 }

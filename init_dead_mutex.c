@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 15:15:49 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/04/29 23:46:32 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/05/02 00:11:14 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	init_dead_mutex(t_data *data, t_philo *philos)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	data->is_dead = 0;
@@ -23,7 +23,9 @@ void	init_dead_mutex(t_data *data, t_philo *philos)
 	{
 		pthread_mutex_init(&(data->forks[i]), NULL);
 		pthread_mutex_init(&(data->lock_last[i]), NULL);
+		pthread_mutex_init(&(data->lock_eats[i]), NULL);
 		philos[i].data = data;
+		philos[i].eats = 0;
 		i++;
 	}
 	usleep(100);

@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 00:20:44 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/05/02 00:21:04 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/05/02 16:34:38 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@ void	ft_take_forks(t_philo *philo, long int start, int id, int r_id)
 {
 	pthread_mutex_lock(&(philo->data->forks[id]));
 	ft_print(philo, start, id, "has taken a fork");
+	if (id == r_id)
+		return ;
 	pthread_mutex_lock(&(philo->data->forks[r_id]));
 	ft_print(philo, start, id, "has taken a fork");
 }
 
-void	ft_eat(t_philo *philo, long int start, int id, int r_id)
+void	ft_eat(t_philo *philo, long int start, int id)
 {
 	ft_print(philo, start, id, "is eating");
 	pthread_mutex_lock(&philo->data->lock_eats[id]);

@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:27:43 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/05/02 00:21:22 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/05/02 16:36:59 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ void	*execute_ths(void *arg)
 			return (NULL);
 		ft_print(philo, start, id, "is thinking");
 		ft_take_forks(philo, start, id, r_id);
-		ft_eat(philo, start, id, r_id);
+		if (id == r_id)
+			return (0);
+		ft_eat(philo, start, id);
 		pthread_mutex_unlock(&(philo->data->forks[r_id]));
 		pthread_mutex_unlock(&(philo->data->forks[id]));
 		ft_print(philo, start, id, "is sleeping");
@@ -76,7 +78,7 @@ void	ft_launch_threads(t_philo *philos)
 		usleep(philos[i].data->num_p * 2);
 		i += 2;
 	}
-	usleep(500 + philos[0].data->num_p);
+	usleep(philos->data->eat / 4);
 	i = 1;
 	while (i < philos->data->num_p)
 	{

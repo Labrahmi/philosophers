@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 11:30:23 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/05/02 16:10:43 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/05/02 16:24:18 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	*execute_ths(void *arg);
 void	init_dead_mutex(t_data *data, t_philo *philos);
 int		ft_check_args(int argc, const char **argv, t_data *data);
 void	ft_take_forks(t_philo *philo, long int start, int id, int r_id);
-void	ft_eat(t_philo *philo, long int start, int id, int r_id);
+void	ft_eat(t_philo *philo, long int start, int id);
 void	ft_print(t_philo *philo, long int start, int id, char *message);
 int		ft_check_death(t_philo *philo);
 

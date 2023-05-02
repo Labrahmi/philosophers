@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 23:48:04 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/05/02 00:08:38 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/05/02 16:21:10 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ int	ft_check_args(int argc, const char **argv, t_data *data)
 	while (i < argc)
 	{
 		if (ft_atoi(argv[i++]) <= 0)
+		{
+			free(data);
 			return (0);
+		}
 	}
 	data->num_p = ft_atoi(argv[1]);
 	data->die = ft_atoi(argv[2]);

@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 20:29:24 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/05/02 16:07:49 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/05/02 16:40:20 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	check_die(t_main_vars *vars, int *done, t_philo *philos)
 	}
 }
 
-void	check_eats(t_main_vars *vars, int *done, t_philo *philos)
+void	check_eats(t_main_vars *vars, int *done)
 {
 	int	i;
 
@@ -66,11 +66,20 @@ void	init_variables(int *done, t_main_vars *vars, t_philo *philos)
 	*done = 1;
 }
 
+int	free_all(t_main_vars *vars, t_philo *philos)
+{
+	free(vars->data->forks);
+	free(vars->data->lock_last);
+	free(vars->data->lock_eats);
+	free(philos);
+	free(vars->data);
+	return (0);
+}
+
 int	main(int argc, char const *argv[])
 {
 	int			i;
 	int			done;
-	int			is_dead;
 	t_main_vars	vars;
 	t_philo		*philos;
 
@@ -86,11 +95,11 @@ int	main(int argc, char const *argv[])
 	{
 		vars.tot_eats = 0;
 		check_die(&vars, &done, philos);
-		check_eats(&vars, &done, philos);
+		check_eats(&vars, &done);
 		usleep(1000);
 	}
 	i = 0;
 	while (i < vars.data->num_p)
 		pthread_join(philos[i++].pthread, NULL);
-	return (0);
+	return (free_all(&vars, philos));
 }
